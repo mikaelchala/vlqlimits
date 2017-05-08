@@ -16,6 +16,7 @@ Two executable files are included:
 The input format is:
 
 % comments
+
 massHeavyTop  massS  BR(T->WB)  BR(T->HT) + BR(T->ST, S->BB)  BR(T->ZT)  BR(T->ST, S -> INV)
 
 massHeavyTop must be above 600 GeV (take for granted that smaller masses are excluded, ;-)). massS should be in the range (100, 400) GeV.
