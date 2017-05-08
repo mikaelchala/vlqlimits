@@ -4,6 +4,7 @@ import sys
 import os.path
 from scipy.interpolate import griddata
 import numpy as np
+from ROOT import TLimit, TH1F, TLimitDataSource, TVectorD, TObjString, TObjArray
 
 def grid(x, y, z, grid_x, grid_y):
 	Z = griddata(np.array(zip(x, y)), np.array(z), (grid_x, grid_y), method = 'linear')
@@ -25,6 +26,8 @@ for line in open(file).readlines():
 			if word != "%":
 				dict[word] = grid(x, y, data[:, k], X, Y)
 			k = k + 1
+M = 1100.
+mS = 400.
 
 def f(char, m1, m2):
 	return dict[char][np.searchsorted(X[:,0], m1), np.searchsorted(Y[0, :], m2)]
@@ -119,16 +122,32 @@ for p in range(0, len(vecM)):
 		excl = 1
 	if ratio_ht > 1:
 		excl = 1
+#################################
+	observed =  [84, 30,   7,   14,  1]
+	predicted = [81, 27.6, 6.5, 9.6, 0.16]
 
-if Nsignal_ht > 22:
-		excl = 1
-if Nsignal_wb > 15:
-		excl = 1
-if Nsignal_zt > 6:
-		excl = 1
-if Nsignal_c1 > 13:
-		excl = 1
-if Nsignal_c2 > 5:
+	background = TH1F("background", "background", len(predicted), 0, len(predicted));
+	data = TH1F("data", "data", len(observed), 0, len(observed));
+
+	for i in range(0, len(predicted)):
+		background.SetBinContent(i+1, predicted[i])
+
+	for i in range(0, len(observed)):
+		data.SetBinContent(i+1, observed[i])
+
+	Nsignal = [Nsignal_ht, Nsignal_wb, Nsignal_zt, Nsignal_c1, Nsignal_c2]
+	signal = TH1F("ysignal"+str(i)+str(j)+str(k)+str(l), "signal", len(predicted), 0, len(predicted));
+	for m in range(0, len(predicted)):
+		signal.SetBinContent(m+1, Nsignal[m])
+		mydatasource = TLimitDataSource(signal, background, data)
+		myconfidence = TLimit.ComputeLimit(mydatasource, 50000)
+		clb = myconfidence.CLb();
+		if clb == 0:
+			valuey = 1.
+		else:
+			valuey = myconfidence.CLs();
+
+	if valuey < 0.05:
 		excl = 1
 
 #################################
