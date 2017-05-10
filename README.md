@@ -21,4 +21,4 @@ massHeavyTop  massS  BR(T->WB)  BR(T->HT) + BR(T->ST, S->BB)  BR(T->ZT)  BR(T->S
 
 massHeavyTop must be above 600 GeV (take for granted that smaller masses are excluded, ;-)). massS should be in the range (100, 400) GeV.
 
-Please, cite [arXiv:1705.0xxxx](http://arxiv.org/abs/1705.0xxxx) if you use this code.
+Please, cite [arXiv:1705.03013](http://arxiv.org/abs/1705.03013) if you use this code.
