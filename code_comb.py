@@ -123,32 +123,32 @@ for p in range(0, len(vecM)):
 	if ratio_ht > 1:
 		excl = 1
 #################################
-	observed =  [84, 30,   7,   14,  1]
-	predicted = [81, 27.6, 6.5, 9.6, 0.16]
+observed =  [84, 30,   7,   14,  1]
+predicted = [81, 27.6, 6.5, 9.6, 0.16]
 
-	background = TH1F("background", "background", len(predicted), 0, len(predicted));
-	data = TH1F("data", "data", len(observed), 0, len(observed));
+background = TH1F("background", "background", len(predicted), 0, len(predicted));
+data = TH1F("data", "data", len(observed), 0, len(observed));
 
-	for i in range(0, len(predicted)):
-		background.SetBinContent(i+1, predicted[i])
+for i in range(0, len(predicted)):
+	background.SetBinContent(i+1, predicted[i])
 
-	for i in range(0, len(observed)):
-		data.SetBinContent(i+1, observed[i])
+for i in range(0, len(observed)):
+	data.SetBinContent(i+1, observed[i])
 
-	Nsignal = [Nsignal_ht, Nsignal_wb, Nsignal_zt, Nsignal_c1, Nsignal_c2]
-	signal = TH1F("ysignal"+str(i)+str(j)+str(k)+str(l), "signal", len(predicted), 0, len(predicted));
-	for m in range(0, len(predicted)):
-		signal.SetBinContent(m+1, Nsignal[m])
-		mydatasource = TLimitDataSource(signal, background, data)
-		myconfidence = TLimit.ComputeLimit(mydatasource, 50000)
-		clb = myconfidence.CLb();
-		if clb == 0:
-			valuey = 1.
-		else:
-			valuey = myconfidence.CLs();
+Nsignal = [Nsignal_ht, Nsignal_wb, Nsignal_zt, Nsignal_c1, Nsignal_c2]
+signal = TH1F("ysignal", "signal", len(predicted), 0, len(predicted));
+for m in range(0, len(predicted)):
+	signal.SetBinContent(m+1, Nsignal[m])
+	mydatasource = TLimitDataSource(signal, background, data)
+	myconfidence = TLimit.ComputeLimit(mydatasource, 50000)
+	clb = myconfidence.CLb();
+	if clb == 0:
+		valuey = 1.
+	else:
+		valuey = myconfidence.CLs();
 
-	if valuey < 0.05:
-		excl = 1
+if valuey < 0.05:
+	excl = 1
 
 #################################
 if len(vecM) != 0:
